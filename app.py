@@ -42,7 +42,14 @@ def start_game(key):
 		url = url_for(".home_page")
 		return redirect(url)
 	if 'lat' in request.form and 'lng' in request.form:
-		location = track_location(session['player']) #not sure how this will work yet
+		target = None
+		for player in game.players:
+			if player.id is not session['player'].id:
+				target = player
+		if target is not None:
+			challenge = Challenge(game,target,request.form['lat'],request.form['lng'])
+			db_session.add(challenge)
+			db_session.commit()
 	return render_template("pages/game_start.html",game=game)
 	
 @app.route("/track",methods=['GET','POST'])
