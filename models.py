@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Float, String, ForeignKey, Table, DateTime
+from sqlalchemy import Column, Integer, Float, String, ForeignKey, Table, DateTime, Boolean
 from sqlalchemy.orm import relationship, backref
 from database import Base
 
@@ -12,8 +12,9 @@ class Player(Base):
 	phone = Column(String(15))
 	name = Column(String(120), nullable=True)
 	
-	locations = relationship('Location')
-		
+	locations = relationship('Location',backref="player")
+	challenges = relationship('Challenge',backref="player")
+	
 	games = relationship("Game",
 		secondary=game_to_player,
 		backref="players")
@@ -28,6 +29,7 @@ class Game(Base):
 	__tablename__ = 'games'
 	id = Column(Integer,primary_key=True)
 	short = Column(String(12))
+	challenges = relationship('Challenge',backref="game")
 	
 	def __init__(self):
 		self.short = self.make_short()
@@ -67,6 +69,7 @@ class Challenge(Base):
 	time = Column(DateTime)
 	lat = Column(Float)
 	lng = Column(Float)
+	completed = Column(Boolean)
 	
 	def __init__(self,game,player,lat,lng):
 		from datetime import datetime
@@ -75,6 +78,7 @@ class Challenge(Base):
 		self.time = datetime.now()
 		self.lat = lat
 		self.lng = lng
+		self.completed = False
 
 	def __repr__(self):
 		return '<Challenge %r>' % (self.id)
