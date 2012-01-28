@@ -10,21 +10,28 @@ app.secret_key = 'secrect'
 @app.route("/",methods=['GET', 'POST'])
 def home_page():
 	login_phone()
-	return render_template("pages/home_page.html")
+	return render_template("pages/signup.html")
+
+@app.route("/start",methods=['GET','POST'])
+def start_game():
+	login_phone()
+	if 'lat' in request.form and 'lng' in request.form and 'target' in request.form:
+		location = track_location(session['player']) #not sure how this will work yet
+	return render_template("pages/game_start.html")
 	
 @app.route("/track",methods=['GET','POST'])
 def view_track_location():
 	login_phone()
-	if track_location():
+	if track_location(session['player']):
 		return jsonify({'success':True})
 	return jsonify({'success':False})
 
-def track_location():
+def track_location(player):
 	if 'lat' in request.form and 'lng' in request.form:
-		location = Location(session['player'],request.form['lat'],request.form['lng'])
+		location = Location(player,request.form['lat'],request.form['lng'])
 		db_session.add(location)
 		db_session.commit()
-		return True
+		return location
 	return False
 	
 def login_phone():

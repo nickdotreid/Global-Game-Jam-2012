@@ -1,0 +1,41 @@
+{% extends "pages/home_page.html" %}
+
+{% block scripts %}
+{{super()}}
+<script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAbEb1hpiYk-X8qwAsFGOrsnv04_imHDpw&sensor=true">
+    </script>
+	<script type="text/javascript">
+	var map;      
+	function initialize() {
+	        var myOptions = {
+	          center: new google.maps.LatLng(-34.397, 150.644),
+	          zoom: 8,
+	          mapTypeId: google.maps.MapTypeId.ROADMAP
+	        };
+	        map = new google.maps.Map(document.getElementById("map_canvas"),
+	            myOptions);
+			google.maps.event.addListener(map, 'click', function(event) {
+				var marker = new google.maps.Marker({
+				      position: event.latLng,
+				      map: map
+				  });
+				  map.setCenter(event.latLng);
+				// set lat lng fields
+			});
+	      }
+	$(document).ready(function(){
+		initialize();
+	});
+	    </script>
+{% endblock %}
+
+{% block content %}
+<form method="post" action="{{ url_for('start_game') }}">
+	<input type="text" name="lat" />
+	<input type="text" name="lng" />
+	<input type="text" name="target" />
+	<div id="map_canvas" style="width:100%; height:300px"></div>
+	<input type="submit" value="Start" />
+</form>
+{% endblock %}
