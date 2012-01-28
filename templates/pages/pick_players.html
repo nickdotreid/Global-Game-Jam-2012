@@ -1,0 +1,10 @@
+{% extends 'pages/home_page.html' %}
+
+{% block content %}
+<form method="post" action="{{ url_for('pick_players') }}">
+	<label for="target">Who do you want to play with?</label>
+	<input id="target" type="text" name="target" />
+	
+	<input type="submit" />
+</form>
+{% endblock %}

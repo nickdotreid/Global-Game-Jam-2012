@@ -1,4 +1,4 @@
-from flask import Flask, redirect, request, flash, render_template, session, jsonify, Blueprint
+from flask import Flask, redirect, request, flash, render_template, session, jsonify, Blueprint, url_for
 import twilio
 
 from database import db_session
@@ -13,11 +13,37 @@ def home_page():
 	return render_template("pages/signup.html")
 
 @app.route("/start",methods=['GET','POST'])
-def start_game():
+def pick_players():
 	login_phone()
-	if 'lat' in request.form and 'lng' in request.form and 'target' in request.form:
+	if 'target' in request.form:
+		#check valid number
+		player = Player.query.filter_by(phone=request.form['target']).first()
+		if player is None:
+			player = Player(request.form['target'])
+			if 'name' in request.form:
+				player.name = request.form['name']
+			db_session.add(player)
+			db_session.commit()
+		game = Game()
+		game.players.append(player)
+		game.players.append(session['player'])
+		db_session.add(game)
+		db_session.commit()
+		url = url_for(".start_game",key=game.short)
+		return redirect(url)
+	return render_template("pages/pick_players.html")
+		
+
+@app.route("/<key>/pick",methods=['GET','POST'])
+def start_game(key):
+	login_phone()
+	game = Game.query.filter_by(short=key).first()
+	if game is None:
+		url = url_for(".home_page")
+		return redirect(url)
+	if 'lat' in request.form and 'lng' in request.form:
 		location = track_location(session['player']) #not sure how this will work yet
-	return render_template("pages/game_start.html")
+	return render_template("pages/game_start.html",game=game)
 	
 @app.route("/track",methods=['GET','POST'])
 def view_track_location():
