@@ -42,7 +42,7 @@ class Game(Base):
 		return '<Game %r>' % (self.short)
 
 class Location(Base):
-	__tablename__ = 'location'
+	__tablename__ = 'locations'
 	id = Column(Integer, primary_key=True)
 	player_id = Column(Integer,ForeignKey('players.id'))
 	time = Column(DateTime)
@@ -58,6 +58,26 @@ class Location(Base):
 
 	def __repr__(self):
 		return '<Location %r>' % (self.id)
+	
+class Challenge(Base):
+	__tablename__ = 'challenges'
+	id = Column(Integer, primary_key=True)
+	player_id = Column(Integer,ForeignKey('players.id'))
+	game_id = Column(Integer,ForeignKey('games.id'))
+	time = Column(DateTime)
+	lat = Column(Float)
+	lng = Column(Float)
+	
+	def __init__(self,game,player,lat,lng):
+		from datetime import datetime
+		self.game = game
+		self.player = player
+		self.time = datetime.now()
+		self.lat = lat
+		self.lng = lng
+
+	def __repr__(self):
+		return '<Challenge %r>' % (self.id)
 		
 def make_random_string(length):
 	import string,random
