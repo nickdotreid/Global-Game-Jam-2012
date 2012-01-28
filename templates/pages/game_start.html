@@ -10,9 +10,12 @@
 
 {% block content %}
 <form method="post" action="{{ url_for('start_game') }}">
-	<input type="text" name="lat" />
-	<input type="text" name="lng" />
-	<input type="text" name="target" />
+	<input type="hidden" name="lat" />
+	<input type="hidden" name="lng" />
+	<label for="target">Who do you want to play with?</label>
+	<input id="target" type="text" name="target" />
+	<label for="map_search">Search Map For Location</label>
+	<input id="map_search" type="text" />
 	<div class="map"></div>
 	<input type="submit" value="Start" />
 </form>
