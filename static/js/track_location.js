@@ -11,7 +11,11 @@ $(document).ready(function(){
 				},
 				success:function(data){
 					if(data['success']){
-						
+						$(".map").trigger({
+							type:"setCenter",
+							lat:position.coords.latitude,
+							lng:position.coords.longitude
+						})
 					}
 				}
 			})

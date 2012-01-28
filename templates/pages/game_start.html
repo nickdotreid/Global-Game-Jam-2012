@@ -6,26 +6,40 @@
       src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAbEb1hpiYk-X8qwAsFGOrsnv04_imHDpw&sensor=true">
     </script>
 	<script type="text/javascript">
-	var map;      
-	function initialize() {
-	        var myOptions = {
-	          center: new google.maps.LatLng(-34.397, 150.644),
-	          zoom: 8,
-	          mapTypeId: google.maps.MapTypeId.ROADMAP
-	        };
-	        map = new google.maps.Map(document.getElementById("map_canvas"),
-	            myOptions);
+	$(document).ready(function(){
+		$(".map").bind("initialize",function(){
+			map_container = $(this);
+			var myOptions = {
+				center: new google.maps.LatLng(-34.397, 150.644),
+				zoom: 13,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			var map = new google.maps.Map(this,myOptions);
+			map_container.data("map",map);
+			
 			google.maps.event.addListener(map, 'click', function(event) {
-				var marker = new google.maps.Marker({
-				      position: event.latLng,
-				      map: map
-				  });
-				  map.setCenter(event.latLng);
+				if(map_container.data("marker")){
+					map_container.data("marker").setMap(null);
+				}
+				marker = new google.maps.Marker({
+					position: event.latLng,
+					map: map
+				});
+				map_container.data("marker",marker);
+				map.setCenter(event.latLng);
 				// set lat lng fields
 			});
-	      }
-	$(document).ready(function(){
-		initialize();
+						
+		}).bind("setCenter",function(event){
+			map = $(this).data("map");
+			if(!map){
+				return true;
+			}
+			if(event.lat && event.lng){
+				map.setCenter(new google.maps.LatLng(event.lat, event.lng))
+			}
+		});
+		$(".map").trigger("initialize");
 	});
 	    </script>
 {% endblock %}
@@ -35,7 +49,7 @@
 	<input type="text" name="lat" />
 	<input type="text" name="lng" />
 	<input type="text" name="target" />
-	<div id="map_canvas" style="width:100%; height:300px"></div>
+	<div class="map"></div>
 	<input type="submit" value="Start" />
 </form>
 {% endblock %}
