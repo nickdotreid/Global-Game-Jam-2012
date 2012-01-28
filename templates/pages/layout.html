@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% if title %}{{title}}{% else %}Global Game Jam 2012{% endif %}</title>
+	{% block styles %}
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}" />
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+	{% endblock %}
+	{% block scripts %}
+	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.address-1.4.min.js') }}"></script>
+	{% endblock %}
+</head>
+<body>
+	<div class="wrapper">
+		<head id="head">
+			
+		</head>
+		<div id="#content">
+			{% block content %}
+			<p>Default Content</p>
+			{% endblock %}
+		</div>
+		<foot id="foot">
+			<div class="byline">
+				<p>Built in less that 48 hours at Global Game Jam 2012</p>
+			</div>
+		</foot>
+	</div>
+</body>
+</html>
