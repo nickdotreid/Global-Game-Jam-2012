@@ -17,9 +17,11 @@ $(document).ready(function(){
 				position: event.latLng,
 				map: map
 			});
-			map_container.data("marker",marker);
-			map.setCenter(event.latLng);
-			// set lat lng fields
+			map_container.data("marker",marker).trigger({
+				type:"setCenter",
+				lat:event.latLng.lat(),
+				lng:event.latLng.lng()
+			});
 		});
 					
 	}).bind("setCenter",function(event){
@@ -29,6 +31,8 @@ $(document).ready(function(){
 		}
 		if(event.lat && event.lng){
 			map.setCenter(new google.maps.LatLng(event.lat, event.lng))
+			$("form input[name=lat]").val(event.lat);
+			$("form input[name=lng]").val(event.lng);
 		}
 	});
 	$(".map").trigger("initialize");
