@@ -11,7 +11,7 @@ $(document).ready(function(){
 				},
 				success:function(data){
 					if(data['success']){
-						alert("WIN");
+						
 					}
 				}
 			})
