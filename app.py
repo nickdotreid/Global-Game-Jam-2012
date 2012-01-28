@@ -41,6 +41,9 @@ def start_game(key):
 	if game is None:
 		url = url_for(".home_page")
 		return redirect(url)
+	if len(game.players)<2:
+		url = url_for(".home_page")
+		return redirect(url)
 	if 'lat' in request.form and 'lng' in request.form:
 		target = None
 		for player in game.players:
@@ -50,7 +53,8 @@ def start_game(key):
 			challenge = Challenge(game,target,request.form['lat'],request.form['lng'])
 			db_session.add(challenge)
 			db_session.commit()
-	return render_template("pages/game_start.html",game=game)
+			send_sms(target.phone,"You were given a challenge "+game.short)
+	return render_template("pages/pick_target.html",game=game)
 	
 @app.route("/track",methods=['GET','POST'])
 def view_track_location():
@@ -78,3 +82,11 @@ def login_phone():
 			db_session.add(player)
 			db_session.commit()
 		session['player'] = player
+
+def send_sms(number,message):
+	from twilio.rest import TwilioRestClient
+	from twilio_settings import *
+	client = TwilioRestClient(twilio_account_sid, twilio_auth_token)
+	message = client.sms.messages.create(to=number,
+	                                     from_="+14157023723",
+	                                     body=message)
