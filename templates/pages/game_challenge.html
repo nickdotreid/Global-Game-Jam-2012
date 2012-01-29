@@ -1,0 +1,42 @@
+{% extends "pages/home_page.html" %}
+
+{% block scripts %}
+{{super()}}
+<script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAbEb1hpiYk-X8qwAsFGOrsnv04_imHDpw&sensor=true">
+    </script>
+	<script type="text/javascript" src="{{ url_for('.static', filename='js/map.js') }}"></script>
+	<script type="text/javascript">
+		$(document).ready(function(event){
+			$(".challenge").bind("show",function(){
+				challenge = $(this);
+				$(".map").trigger({
+					type:"add_marker",
+					lat:challenge.data("lat"),
+					lng:challenge.data("lng")
+				});
+			}).bind("click",function(){
+				$(this).trigger("show");
+			});
+			setTimeout('$(".challenge:first").click();',500);
+		});
+	</script>
+{% endblock %}
+
+{% block content %}
+{% if challenge.completed %}
+<h3>Ball Caught</h3>
+{% endif %}
+<form method="POST" action="{{ url_for('.game_challenge',key=game.short) }}">
+	<legend>Catch the ball</legend>
+	<label><input class="challenge" data-lat="{{challenge.lat}}" data-lng="{{challenge.lng}}" type="radio" name="challenge_id" value="{{challenge.id}}" /> The Ball</label>
+	<input class="user coords" type="hidden" name="lat" />
+	<input class="user coords" type="hidden" name="lng" />
+	<div class="map"></div>
+	<input type="submit" value="I'm Here" />
+</form>
+<form method="post" action="/challenge/<id>/delete">
+	<!-- add reasons here?? -->
+	<input type="submit" value="Really Bad Idea" />
+</form>
+{% endblock %}

@@ -9,12 +9,15 @@
 {% endblock %}
 
 {% block content %}
-<form method="post" action="{{ url_for('start_game',key=game.short) }}">
-	<input type="hidden" name="lat" />
-	<input type="hidden" name="lng" />
-	<label for="map_search">Search Map For Location</label>
-	<input id="map_search" type="text" />
-	<div class="map"></div>
-	<input type="submit" value="Start" />
-</form>
+{{game.short}}
+<h3>Players in Game</h3>
+<ul class="players list">
+	{% for player in game.players %}
+	{% if player.id == g.player.id %}
+	<li>You <em>{{player.phone}}</em></li>
+	{% else %}
+	<li>{{player.name}} <em>{{player.phone}}</em></li>
+	{% endif %}
+	{% endfor %}
+</ul>
 {% endblock %}

@@ -1,0 +1,32 @@
+{% extends "pages/home_page.html" %}
+
+{% block scripts %}
+{{super()}}
+<script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAbEb1hpiYk-X8qwAsFGOrsnv04_imHDpw&sensor=true">
+    </script>
+	<script type="text/javascript" src="{{ url_for('.static', filename='js/map.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<form method="post" action="{{ url_for('.challenge_player',key=game.short) }}">
+	<legend>Throw a ball</legend>
+	<ul class="players list">
+		{% for player in game.players %}
+		{% if g.player and player.id == g.player.id %}
+		<!-- You can't add yourself -->
+		{% else %}
+		<li><label><input type="radio" name="player_id" value="{{player.id}}" />{{player.name}} <em>{{player.phone}}</em></label></li>
+		{% endif %}
+		{% endfor %}
+	</ul>
+	<input type="hidden" name="lat" />
+	<input type="hidden" name="lng" />
+	<!--
+	<label for="map_search">Search Map For Location</label>
+	<input id="map_search" type="text" />
+	-->
+	<div class="map"></div>
+	<input type="submit" value="Send Challenge" />
+</form>
+{% endblock %}

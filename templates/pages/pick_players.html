@@ -1,10 +1,18 @@
 {% extends 'pages/home_page.html' %}
 
 {% block content %}
-<form method="post" action="{{ url_for('pick_players') }}">
-	<label for="target">Who do you want to play with?</label>
-	<input id="target" type="text" name="target" />
-	
-	<input type="submit" />
+<h3>Players in Game</h3>
+<ul class="players list">
+	{% for player in game.players %}
+	<li>{{player.name}} <em>{{player.phone}}</em>
+	{% endfor %}
+</ul>
+<form method="post" action="{{ url_for('.pick_players',key=game.short) }}">
+	<legend>Add a player</legend>
+	<label for="phone">Phone Number</label>
+	<input id="phone" type="text" name="phone" />
+	<label for="name">Name</label>
+	<input id="name" type="text" name="name" />
+	<input type="submit" value="Add Player" />
 </form>
 {% endblock %}

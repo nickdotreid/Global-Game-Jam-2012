@@ -13,19 +13,31 @@
 </head>
 <body>
 	<div class="wrapper">
-		<head id="head">
-			
-		</head>
+		<div id="head">
+			{% if g.player %}
+			{% if g.player.name %}{{g.player.name}}{% endif %}
+			{% if g.player.phone %}{{g.player.phone}}{% endif %}
+			{% endif %}
+		</div>
 		<div id="#content">
+			{% with messages = get_flashed_messages() %}
+			  {% if messages %}
+			    <ul class=flashes>
+			    {% for message in messages %}
+			      <li>{{ message }}</li>
+			    {% endfor %}
+			    </ul>
+			  {% endif %}
+			{% endwith %}
 			{% block content %}
 			<p>Default Content</p>
 			{% endblock %}
 		</div>
-		<foot id="foot">
+		<div id="foot">
 			<div class="byline">
 				<p>Built in less that 48 hours at Global Game Jam 2012</p>
 			</div>
-		</foot>
+		</div>
 	</div>
 </body>
 </html>

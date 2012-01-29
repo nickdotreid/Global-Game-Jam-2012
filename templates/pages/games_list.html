@@ -1,0 +1,9 @@
+{% extends "pages/home_page.html" %}
+
+{% block content %}
+	<ul class="games list">
+	{% for game in games %}
+	<li><a href="{{ url_for('.draw_game',key=game.short)}}">{{game.short}}</a></li>
+	{% endfor %}
+	</ul>
+{% endblock %}
