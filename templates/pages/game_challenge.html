@@ -10,6 +10,10 @@
 				type:"add_marker",
 				lat:challenge.data("lat"),
 				lng:challenge.data("lng")
+			}).trigger({
+				type:"set_center",
+				lat:challenge.data("lat"),
+				lng:challenge.data("lng")
 			});
 		}).bind("click",function(){
 			$(this).trigger("show");

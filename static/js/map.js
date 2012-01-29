@@ -50,11 +50,6 @@ $(document).ready(function(){
 	    };
 	    circle = new google.maps.Circle(circle_options);
 		$(this).data("person",circle);
-		$(this).trigger({
-			type:"set_center",
-			lat:event.lat,
-			lng:event.lng
-		});
 	}).bind("set_center",function(event){
 		map = $(this).data("map");
 		if(!map){

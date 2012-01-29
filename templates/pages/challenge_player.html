@@ -25,6 +25,7 @@ $(document).ready(function(){
 	}else if($("input.player:first").length>0){
 		$("input.player:first").click();
 	}
+	setTimeout('$("input.player:first").click();',700);
 });
 </script>
 {% endblock %}
@@ -39,7 +40,7 @@ $(document).ready(function(){
 			{% if loop.first and loop.last %}
 			<li>
 				<input type="hidden" class="player" name="player_id" value="{{player.id}}" />
-				{% if player.name %}{{player.name}}{% endif %}&nbsp;<em>{{player.phone}}</em>
+				{% if player.name %}{{player.name}}{% endif %} <em>{{player.phone}}</em><!-- <a href="#" class="show_location">Show Their Position</a> -->
 			</li>
 			{% else %}
 			<li><label class="radio"><input type="radio" class="player" name="player_id" value="{{player.id}}" />{% if player.name %}{{player.name}}{% endif %}&nbsp;<em>{{player.phone}}</em></label></li>
