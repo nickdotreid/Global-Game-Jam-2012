@@ -4,9 +4,6 @@
 {{super()}}
 <script type="text/javascript">
 $(document).ready(function(){
-	if($(".player:selected").length<1){
-		$(".player:first").click();
-	}
 	$(".players.list input.player").click(function(){
 		player = $(this);
 		$.ajax({
@@ -21,8 +18,13 @@ $(document).ready(function(){
 					lng:data.lng
 				})
 			}
-		})
+		});
 	});
+	if($(".player:selected").length<1){
+		$(".player:first").click();
+	}else if($("input.player:first").length>0){
+		$("input.player:first").click();
+	}
 });
 </script>
 {% endblock %}

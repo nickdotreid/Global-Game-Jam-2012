@@ -76,6 +76,7 @@ def challenge_player(key):
 			flash("Player does not exist","error")
 			return redirect(url_for(".draw_game",key=game.short))
 		challenge = Challenge(game,player,request.form['lat'],request.form['lng']);
+		db_session.add(challenge)
 		db_session.commit()
 		send_game_sms(player,game,g.player.name+" threw a ball at you")
 		flash("You threw the ball to "+player.name+" at "+player.phone,"success")
