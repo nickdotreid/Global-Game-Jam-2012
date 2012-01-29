@@ -79,8 +79,8 @@ def challenge_player(key):
 			return redirect(url_for(".draw_game",key=game.short))
 		challenge = Challenge(game,player,request.form['lat'],request.form['lng']);
 		db_session.commit()
-		send_sms(player.phone,"You got a challenge")
-		flash("Player has been challenged"+make_game_link(game.short),"success")
+		send_sms(player.phone,"You got a challenge"+make_game_link(game.short))
+		flash("Player has been challenged","success")
 		return redirect(url_for(".draw_game",key=game.short))
 	return render_template("pages/challenge_player.html",game=game)
 
