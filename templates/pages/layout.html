@@ -10,11 +10,13 @@
 	{% block scripts %}
 	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.address-1.4.min.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/page.js') }}"></script>
 	{% endblock %}
 </head>
 <body>
 	<div class="wrapper">
 		<div id="head">
+			{% block head %}
 			{% if g.player %}
 			{% if g.player.name %}{{g.player.name}}{% endif %}
 			{% if g.player.phone %}{{g.player.phone}}{% endif %}
@@ -23,6 +25,7 @@
 			<a href="{{ url_for('.do_login') }}">Login</a>
 			<a href="{{ url_for('.signup') }}">Sign Up</a>
 			{% endif %}
+			{% endblock %}
 		</div>
 		<div id="#content">
 			{% with messages = get_flashed_messages() %}
@@ -39,9 +42,11 @@
 			{% endblock %}
 		</div>
 		<div id="foot">
+			{% block foot %}
 			<div class="byline">
 				<p>Built in less that 48 hours at Global Game Jam 2012</p>
 			</div>
+			{% endblock %}
 		</div>
 	</div>
 </body>

@@ -1,5 +1,16 @@
 {% extends 'pages/home_page.html' %}
 
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript">
+$(document).ready(function(){
+	$("form input[value=new]").click(function(){
+		$("#name").focus()
+	})
+});
+</script>
+{% endblock %}
+
 {% block content %}
 <h3>Players in Game</h3>
 <ul class="players list">
@@ -9,16 +20,16 @@
 </ul>
 <form method="post" action="{{ url_for('.pick_players',key=game.short)}}">
 	{% for player in friends %}
-	<label><input type="radio" name="phone" value="{{player.phone}}" />{{player.name}} <em>({{player.phone}})</em></label>
+	<label class="radio"><input class="player existing" type="radio" name="player_id" value="{{player.id}}" />{{player.name}} <em>({{player.phone}})</em></label>
 	{% endfor %}
-	<input type="submit" />
-</form>
-<form method="post" action="{{ url_for('.pick_players',key=game.short) }}">
-	<legend>Add a player</legend>
-	<label for="name">Name</label>
-	<input id="name" type="text" name="name" />
-	<label for="phone">Phone Number</label>
-	<input id="phone" type="text" name="phone" />
-	<input type="submit" value="Add Player" />
+	<label class="radio"><input type="radio" name="player_id" value="new" />Add a new player</label>
+	<fieldset>
+		<legend><span>Add a new player</span></legend>
+		<label for="name">Name</label>
+		<input id="name" type="text" name="name" />
+		<label for="phone">Phone Number <span class="required">Required</span></label>
+		<input id="phone" type="text" name="phone" />
+	</fieldset>
+	<input class="button" type="submit" value="Add Player" />
 </form>
 {% endblock %}

@@ -30,26 +30,26 @@ def pick_players(key):
 	game = Game.query.filter_by(short=key).first()
 	if game is None:
 		return redirect("/")
-	if 'phone' in request.form:
+	player = None
+	if 'player_id' in request.form and request.form!="new":
+		player = get_player(id = request.form['player_id'])
+	if 'phone' in request.form and player is None:
 		phone_number = format_phone_number(request.form['phone'])
-		player = Player.query.filter_by(phone=phone_number).first()
-		if player is None:
-			player = Player(phone_number)
-			if 'name' in request.form:
-				player.name = request.form['name']
-			db_session.add(player)
-			db_session.commit()
-		found = False
-		for person in game.players:
-			if person.id == player.id:
-				found = True
-				flash("Player is already in game")
-		if not found:
-			game.players.append(player)
-			db_session.commit()
+		player = get_player(phone = request.form['phone'], name = request.form['name'])
+	if player is not None:
+		if add_player_to_game(player,game):
 			return redirect(url_for(".draw_game",key=game.short,player_id=player.id))
 	friends = find_player_friends(g.player)
 	return render_template("pages/pick_players.html",game=game,friends=friends)
+
+def add_player_to_game(player,game):
+	for person in game.players:
+		if person.id == player.id:
+			flash("Player is already in game")
+			return False
+	game.players.append(player)
+	db_session.commit()
+	return True
 
 @app.route("/game/<key>",methods=['GET','POST'])
 def draw_game(key):
@@ -180,7 +180,7 @@ def track_location(player):
 		return location
 	return False
 
-def get_player(id=False,phone=False):
+def get_player(id=False,phone=False,name=False):
 	player = None
 	if phone:
 		phone_number = format_phone_number(phone)
@@ -189,6 +189,8 @@ def get_player(id=False,phone=False):
 		player = Player.query.filter_by(id=id).first()
 	if player is None and phone:
 		player = Player(format_phone_number(phone))
+		if name:
+			player.name = name
 		db_session.add(player)
 		db_session.commit()
 	return player

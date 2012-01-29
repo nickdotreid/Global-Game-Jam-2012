@@ -3,7 +3,7 @@ $(document).ready(function(){
 		map_container = $(this);
 		var myOptions = {
 			center: new google.maps.LatLng(-34.397, 150.644),
-			zoom: 13,
+			zoom: 15,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		};
 		var map = new google.maps.Map(this,myOptions);

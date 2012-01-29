@@ -6,5 +6,14 @@
 {% endblock %}
 
 {% block content %}
-<p>Home Page content</p>
+<p>Send a ball to your friend, where ever they are.  They will have to run for it to catch it, but be nice because they will be throwing balls for you too.</p>
+<p>Its all through text messaging, so whats your number?</p>
+<form action="{{ url_for('.signup') }}" method="POST">
+	<legend>Enter your phone number to start a game</legend>
+	<label for="name">Name</label>
+	<input type="text" id="name" name="name" />
+	<label for="phone_number">Mobile Number <span class="required">Required</span></label>
+	<input class="required" type="text" id="phone_number" name="phone" value="" />
+	<input type="submit" value="Get Running" />
+</form>
 {% endblock %}

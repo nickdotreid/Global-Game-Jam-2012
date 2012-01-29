@@ -1,26 +1,22 @@
-{% extends "pages/home_page.html" %}
+{% extends "pages/game_map.html" %}
 
 {% block scripts %}
 {{super()}}
-<script type="text/javascript"
-      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAbEb1hpiYk-X8qwAsFGOrsnv04_imHDpw&sensor=true">
-    </script>
-	<script type="text/javascript" src="{{ url_for('.static', filename='js/map.js') }}"></script>
-	<script type="text/javascript">
-		$(document).ready(function(event){
-			$(".challenge").bind("show",function(){
-				challenge = $(this);
-				$(".map").trigger({
-					type:"add_marker",
-					lat:challenge.data("lat"),
-					lng:challenge.data("lng")
-				});
-			}).bind("click",function(){
-				$(this).trigger("show");
+<script type="text/javascript">
+	$(document).ready(function(event){
+		$(".challenge").bind("show",function(){
+			challenge = $(this);
+			$(".map").trigger({
+				type:"add_marker",
+				lat:challenge.data("lat"),
+				lng:challenge.data("lng")
 			});
-			setTimeout('$(".challenge:first").click();',500);
+		}).bind("click",function(){
+			$(this).trigger("show");
 		});
-	</script>
+		setTimeout('$(".challenge:first").click();',500);
+	});
+</script>
 {% endblock %}
 
 {% block content %}
