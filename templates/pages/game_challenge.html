@@ -14,25 +14,37 @@
 		}).bind("click",function(){
 			$(this).trigger("show");
 		});
+		$(".map").bind("show_user",function(event){
+			lat = $("input.user.coords[name=lat]").val();
+			lng = $("input.user.coords[name=lng]").val();
+			if(lat=="" || lng==""){
+				setTimeout('$(".map").trigger("show_user");',300);
+				return true;
+			}
+			$(".map").trigger({
+				type:'add_player',
+				lat:lat,
+				lng:lng
+			})
+		});
+		setTimeout('$(".map").trigger("show_user");',300);
 		setTimeout('$(".challenge:first").click();',500);
 	});
 </script>
 {% endblock %}
 
 {% block content %}
-{% if challenge.completed %}
-<h3>Ball Caught</h3>
-{% endif %}
+<div class="score">Current Score:<span class="number">{{game.count_score()}}</span> points</div>
 <form method="POST" action="{{ url_for('.game_challenge',key=game.short) }}">
 	<legend>Catch the ball</legend>
 	<label><input class="challenge" data-lat="{{challenge.lat}}" data-lng="{{challenge.lng}}" type="radio" name="challenge_id" value="{{challenge.id}}" /> The Ball</label>
 	<input class="user coords" type="hidden" name="lat" />
 	<input class="user coords" type="hidden" name="lng" />
 	<div class="map"></div>
-	<input type="submit" value="I'm Here" />
+	<input class="button" type="submit" value="I'm Here" />
 </form>
 <form method="post" action="{{ url_for('.challenge_delete',id=challenge.id) }}">
 	<!-- add reasons here?? -->
-	<input type="submit" value="Really Bad Idea" />
+	<input class="button cancel" type="submit" value="Really Bad Idea" />
 </form>
 {% endblock %}

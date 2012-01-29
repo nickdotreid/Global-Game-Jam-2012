@@ -80,6 +80,15 @@ form label.radio input{
 	text-shadow:-1px 1px 2px #FFF;
 }
 
+.button.cancel{
+	background:#9f4949;
+	color:#FFF;
+}
+.button.cancel.hover,.button.cancel:hover{
+	background:#9f1111;
+	text-shadow:-1px 1px 2px #000;
+}
+
 .map{
 	display:block;
 	width:100%;

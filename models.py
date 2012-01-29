@@ -41,7 +41,9 @@ class Game(Base):
 		return key
 	
 	def count_score(self):
-		return 10
+		num_challenges = len(self.challenges)
+		num_players = len(self.players)
+		return ((7*num_challenges)/(num_players+1)*2)*100
 	
 	def __repr__(self):
 		return '<Game %r>' % (self.short)

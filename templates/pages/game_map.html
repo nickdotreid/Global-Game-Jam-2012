@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block content %}
+<div class="score"><span class="number">{{game.count_score()}}</span> points</div>
 <form method="post" action="{{ url_for('.challenge_player',key=game.short) }}">
 	<legend>Throw a ball</legend>
 	<ul class="players list">

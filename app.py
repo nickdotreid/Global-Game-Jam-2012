@@ -187,6 +187,15 @@ def track_location(player):
 		return location
 	return False
 
+@app.route("/location/player",methods=['GET','POST'])
+def get_location():
+	if 'id' in request.form:
+		player = get_player(id=request.form['id'])
+		if player is not None and len(player.locations)>0:
+			location = player.locations.pop()
+			return jsonify({'id':request.form['id'],'lat':location.lat,'lng':location.lng})
+	return jsonify({'success':False})
+
 def get_player(id=False,phone=False,name=False):
 	player = None
 	if phone:

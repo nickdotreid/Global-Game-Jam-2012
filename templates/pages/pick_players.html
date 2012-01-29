@@ -7,6 +7,11 @@ $(document).ready(function(){
 	$("form input[value=new]").click(function(){
 		$("#name").focus()
 	})
+	$("#name,#phone").change(function(){
+		if(this.value!=""){
+			$("form input[value=new]").attr("checked",true);
+		}
+	})
 });
 </script>
 {% endblock %}

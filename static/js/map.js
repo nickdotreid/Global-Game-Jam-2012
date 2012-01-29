@@ -29,7 +29,32 @@ $(document).ready(function(){
 			position: new google.maps.LatLng(event.lat, event.lng),
 			map: map
 		});
-		map_container.data("marker",marker).trigger({
+		$(this).data("marker",marker).trigger({
+			type:"set_center",
+			lat:event.lat,
+			lng:event.lng
+		});
+	}).bind("add_player",function(event){
+		map = $(this).data("map");
+		if(!map){
+			return false;
+		}
+		if($(this).data("person")){
+			$(this).data("person").setMap(null);
+		}
+		var circle_options = {
+	      strokeColor: "#0000FF",
+	      strokeOpacity: 0.8,
+	      strokeWeight: 2,
+	      fillColor: "#0000FF",
+	      fillOpacity: 0.35,
+	      map: map,
+	      center: new google.maps.LatLng(event.lat, event.lng),
+	      radius: 40
+	    };
+	    circle = new google.maps.Circle(circle_options);
+		$(this).data("person",circle);
+		$(this).trigger({
 			type:"set_center",
 			lat:event.lat,
 			lng:event.lng

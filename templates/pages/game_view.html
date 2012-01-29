@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-{{game.short}}
+<div class="score"><span class="number">{{game.count_score()}}</span> points</div>
 <h3>Players in Game</h3>
 <ul class="players list">
 	{% for player in game.players %}
