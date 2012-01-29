@@ -222,8 +222,15 @@ def find_player_friends(player):
 	for game in player.games:
 		for person in game.players:
 			if person.id != player.id:
-				friends.append(person)
+				if not player_in_list(person,friends):
+					friends.append(person)
 	return friends
+
+def player_in_list(player,people):
+	for person in people:
+		if player.id == person.id:
+			return True
+	return False
 
 def login():
 	g.player = None

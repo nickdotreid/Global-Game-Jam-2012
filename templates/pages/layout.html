@@ -18,10 +18,15 @@
 		<div id="head">
 			{% block head %}
 			{% if g.player %}
-			{% if g.player.name %}{{g.player.name}}{% endif %}
-			{% if g.player.phone %}{{g.player.phone}}{% endif %}
+			{% if g.player.name %}
+				{{g.player.name}}
+			{% else %}
+				{{g.player.phone}}
+			{% endif %}
+			<a href="{{ url_for('.list_games') }}">Games</a>
 			<a href="{{ url_for('.logout') }}">Logout</a>
 			{% else %}
+			<a href="/">Home</a>
 			<a href="{{ url_for('.do_login') }}">Login</a>
 			<a href="{{ url_for('.signup') }}">Sign Up</a>
 			{% endif %}
