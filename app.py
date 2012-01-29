@@ -208,4 +208,19 @@ def make_game_link(key):
 	prefix = 'http://'
 	if 'ggj12_prefix' in os.environ:
 		prefix = os.environ['ggj12_prefix']
-	return prefix+url_for(".draw_game",key=key)
+	link = prefix+url_for(".draw_game",key=key)
+	return shorten_url(link)
+
+def shorten_url(link):
+	import bitly_api
+	if 'ggj12_bitly_username' not in os.environ or 'ggj12_bitly_token' not in os.environ:
+		return link
+	username = os.environ['ggj12_bitly_username']
+	token = os.environ['ggj12_bitly_token']
+	bitly = bitly_api.Connection(username,token)
+	try:
+		data = bitly.shorten(link)
+	except:
+		pass
+		return link
+	return data['url']
