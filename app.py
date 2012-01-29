@@ -11,12 +11,10 @@ app.secret_key = os.environ['ggj12_secret_key']
 
 @app.route("/",methods=['GET', 'POST'])
 def home_page():
-	login()
 	return render_template("pages/signup.html")
 
 @app.route("/start",methods=['GET','POST'])
 def start_game():
-	login()
 	if not g.player or g.player is None:
 		return redirect("/")
 	game = Game()
@@ -25,9 +23,8 @@ def start_game():
 	db_session.commit()
 	return redirect(url_for(".pick_players",key=game.short))
 
-@app.route("/<key>/pick",methods=['GET','POST'])
+@app.route("/game/<key>/pick",methods=['GET','POST'])
 def pick_players(key):
-	login()
 	game = Game.query.filter_by(short=key).first()
 	if game is None:
 		return redirect("/")
@@ -53,7 +50,6 @@ def pick_players(key):
 
 @app.route("/game/<key>",methods=['GET','POST'])
 def draw_game(key):
-	login()
 	game = Game.query.filter_by(short=key).first()
 	if game is None:
 		return redirect("/")
@@ -69,7 +65,6 @@ def draw_game(key):
 
 @app.route("/game/<key>/challenge",methods=['GET','POST'])
 def challenge_player(key):
-	login()
 	game = Game.query.filter_by(short=key).first()
 	if game is None:
 		return redirect("/")
@@ -87,7 +82,6 @@ def challenge_player(key):
 
 @app.route("/game/<key>/my_challenge",methods=['GET','POST'])
 def game_challenge(key):
-	login()
 	game = Game.query.filter_by(short=key).first()
 	if game is None:
 		return redirect("/")
@@ -99,14 +93,12 @@ def game_challenge(key):
 	return render_template("pages/game_view.html",game=game)
 
 def check_challenge_answer():
-	login()
 	if 'challenge_id' in request.form:
 		challenge = Challenge.query.filter_by(id=request.form['challenge_id']).first()
 		if challenge is not None:
 			challenge.completed = True
 			db_session.commit()
-			flash("You completed the challenge")
-			#send sms to all other game players
+			flash("You caught the ball")
 			for player in challenge.game.players:
 				if player.id != g.player.id:
 					send_sms(player.phone," has completed their challenge in "+make_game_link(challenge.game.short))
@@ -115,7 +107,6 @@ def check_challenge_answer():
 
 @app.route("/games")
 def list_games():
-	login()
 	if g.player is None:
 		return redirect("/")
 	games = g.player.games
@@ -140,7 +131,6 @@ def signup():
 
 @app.route("/login",methods=['GET','POST'])
 def do_login():
-	login()
 	if 'phone' in request.form:
 		phone_number = format_phone_number(request.form['phone'])
 		player = Player.query.filter_by(phone=phone_number).first()
@@ -159,11 +149,14 @@ def logout():
 
 @app.route("/track",methods=['GET','POST'])
 def view_track_location():
-	login()
 	if 'player_id' in session:
 		if track_location(g.player):
 			return jsonify({'success':True})
 	return jsonify({'success':False})
+
+@app.before_request
+def check_login():
+	login()
 
 def track_location(player):
 	if 'lat' in request.form and 'lng' in request.form:
@@ -172,18 +165,27 @@ def track_location(player):
 		db_session.commit()
 		return location
 	return False
-	
+
+def get_player(id=False,phone=False):
+	player = None
+	if phone:
+		phone_number = format_phone_number(phone)
+		Player.query.filter_by(phone=phone_number).first()
+	if id:
+		player = Player.query.filter_by(id=id).first()
+	if player is None and phone:
+		player = Player(format_phone_number(phone))
+		db_session.add(player)
+		db_session.commit()
+	return player
+
 def login():
 	g.player = None
 	if 'phone' in request.args:
-		player = Player.query.filter_by(phone=request.args['phone']).first()
-		if player is None:
-			player = Player(request.args['phone'])
-			db_session.add(player)
-			db_session.commit()
+		player = get_player(phone=request.args['phone'])
 		session['player_id'] = player.id
 	if 'player_id' in session:
-		player = Player.query.filter_by(id=session['player_id']).first()
+		player = get_player(id=session['player_id'])
 		if player is not None:
 			g.player = player
 			return player
