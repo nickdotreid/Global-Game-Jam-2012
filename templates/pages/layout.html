@@ -17,6 +17,10 @@
 			{% if g.player %}
 			{% if g.player.name %}{{g.player.name}}{% endif %}
 			{% if g.player.phone %}{{g.player.phone}}{% endif %}
+			<a href="{{ url_for('.logout') }}">Logout</a>
+			{% else %}
+			<a href="{{ url_for('.do_login') }}">Login</a>
+			<a href="{{ url_for('.signup') }}">Sign Up</a>
 			{% endif %}
 		</div>
 		<div id="#content">

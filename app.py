@@ -142,12 +142,20 @@ def signup():
 def do_login():
 	login()
 	if 'phone' in request.form:
-		player = Player.query.filter_by(phone=request.form['phone']).first()
+		phone_number = format_phone_number(request.form['phone'])
+		player = Player.query.filter_by(phone=phone_number).first()
 		if player is not None:
 			session['player_id'] = player.id
 			g.player = player
 			return redirect(url_for(".list_games"))
+		flash("Could not login user","error")
 	return render_template("pages/login.html")
+
+@app.route("/logout")
+def logout():
+	session['player_id'] = None
+	g.player = None
+	return redirect(url_for(".home_page"))
 
 @app.route("/track",methods=['GET','POST'])
 def view_track_location():
@@ -186,7 +194,7 @@ def is_valid_number(num):
 
 def format_phone_number(num):
 	# remove ( ) - . +1
-	num = num.replace('(','').replace(')','').replace('-','').replace('.','').replace('+1','')
+	num = num.replace('(','').replace(')','').replace('-','').replace('.','').replace('+1','').replace(' ','')
 	while len(num)<10:
 		num += "0"
 	return num
@@ -195,4 +203,7 @@ def pretty_phone_number(num):
 	return num
 	
 def make_game_link(key):
-	return url_for(".draw_game",key=key)
+	prefix = 'http://'
+	if 'ggj12_prefix' in os.environ:
+		prefix = os.environ['ggj12_prefix']
+	return prefix+url_for(".draw_game",key=key)
