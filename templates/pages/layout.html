@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>{% if title %}{{title}}{% else %}Global Game Jam 2012{% endif %}</title>
+	<title>{% if title %}{{title}}{% else %}Running Ball{% endif %}</title>
+	<meta name = "viewport" content = "initial-scale = 1.0, user-scalable = no" />
 	{% block styles %}
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}" />
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />

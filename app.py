@@ -13,7 +13,7 @@ app.secret_key = os.environ['ggj12_secret_key']
 def home_page():
 	if g.player:
 		return redirect(url_for(".list_games"))
-	return render_template("pages/signup.html")
+	return render_template("pages/home_page.html")
 
 @app.route("/start",methods=['GET','POST'])
 def start_game():
