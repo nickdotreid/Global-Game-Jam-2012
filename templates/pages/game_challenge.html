@@ -35,7 +35,7 @@
 	<div class="map"></div>
 	<input type="submit" value="I'm Here" />
 </form>
-<form method="post" action="/challenge/<id>/delete">
+<form method="post" action="{{ url_for('.challenge_delete',id=challenge.id) }}">
 	<!-- add reasons here?? -->
 	<input type="submit" value="Really Bad Idea" />
 </form>

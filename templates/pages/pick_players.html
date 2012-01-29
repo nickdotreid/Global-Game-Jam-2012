@@ -7,6 +7,12 @@
 	<li>{{player.name}} <em>{{player.phone}}</em>
 	{% endfor %}
 </ul>
+<form method="post" action="{{ url_for('.pick_players',key=game.short)}}">
+	{% for player in friends %}
+	<label><input type="radio" name="phone" value="{{player.phone}}" />{{player.name}} <em>({{player.phone}})</em></label>
+	{% endfor %}
+	<input type="submit" />
+</form>
 <form method="post" action="{{ url_for('.pick_players',key=game.short) }}">
 	<legend>Add a player</legend>
 	<label for="name">Name</label>

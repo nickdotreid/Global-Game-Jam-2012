@@ -11,6 +11,8 @@ app.secret_key = os.environ['ggj12_secret_key']
 
 @app.route("/",methods=['GET', 'POST'])
 def home_page():
+	if g.player:
+		return redirect(url_for(".list_games"))
 	return render_template("pages/signup.html")
 
 @app.route("/start",methods=['GET','POST'])
@@ -46,7 +48,8 @@ def pick_players(key):
 			game.players.append(player)
 			db_session.commit()
 			return redirect(url_for(".draw_game",key=game.short,player_id=player.id))
-	return render_template("pages/pick_players.html",game=game)
+	friends = find_player_friends(g.player)
+	return render_template("pages/pick_players.html",game=game,friends=friends)
 
 @app.route("/game/<key>",methods=['GET','POST'])
 def draw_game(key):
@@ -103,6 +106,17 @@ def check_challenge_answer():
 				if player.id != g.player.id:
 					send_sms(player.phone," has completed their challenge in "+make_game_link(challenge.game.short))
 			return redirect(url_for(".draw_game",key=challenge.game.short))
+	return redirect("/")
+	
+@app.route("/challenge/<id>/delete",methods=['GET','POST'])
+def challenge_delete(id):
+	challenge = Challenge.query.filter_by(id=id).first()
+	if challenge is not None:
+		db_session.delete(challenge)
+		db_session.commit()
+		flash("Challenge has been deleted")
+		send_sms(challenge.player.name," couldn't catch the ball. Give them something easier to catch."+make_game_link(challenge.game.short))
+		return redirect(url_for(".draw_game",key=challenge.game.short))
 	return redirect("/")
 
 @app.route("/games")
@@ -178,6 +192,14 @@ def get_player(id=False,phone=False):
 		db_session.add(player)
 		db_session.commit()
 	return player
+
+def find_player_friends(player):
+	friends = []
+	for game in player.games:
+		for person in game.players:
+			if person.id != player.id:
+				friends.append(person)
+	return friends
 
 def login():
 	g.player = None
