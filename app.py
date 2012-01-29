@@ -190,6 +190,9 @@ def format_phone_number(num):
 	while len(num)<10:
 		num += "0"
 	return num
+
+def pretty_phone_number(num):
+	return num
 	
 def make_game_link(key):
 	return url_for(".draw_game",key=key)
