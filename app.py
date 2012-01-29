@@ -63,7 +63,7 @@ def draw_game(key):
 	for challenge in game.challenges:
 		if challenge.player.id == g.player.id:
 			return game_challenge(game.short)
-	return "Nothing to do with this game"
+	return render_template("pages/game_view.html",game=game)
 	
 
 @app.route("/game/<key>/challenge",methods=['GET','POST'])
