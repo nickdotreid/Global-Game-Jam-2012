@@ -2,7 +2,7 @@ $(document).ready(function(){
 	$(".map").bind("initialize",function(){
 		map_container = $(this);
 		var myOptions = {
-			center: new google.maps.LatLng(-34.397, 150.644),
+			center: new google.maps.LatLng(	37.78392669999999, -122.3924249),
 			zoom: 15,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		};
@@ -29,11 +29,7 @@ $(document).ready(function(){
 			position: new google.maps.LatLng(event.lat, event.lng),
 			map: map
 		});
-		$(this).data("marker",marker).trigger({
-			type:"set_center",
-			lat:event.lat,
-			lng:event.lng
-		});
+		$(this).data("marker",marker);
 	}).bind("add_player",function(event){
 		map = $(this).data("map");
 		if(!map){

@@ -27,6 +27,10 @@
 				lng:lng
 			})
 		});
+		$("#cancel_button").click(function(event){
+			event.preventDefault();
+			$("#real_cancel").submit();
+		})
 		setTimeout('$(".map").trigger("show_user");',300);
 		setTimeout('$(".challenge:first").click();',500);
 	});
@@ -36,14 +40,16 @@
 {% block content %}
 <div class="score">Current Score:<span class="number">{{game.count_score()}}</span> points</div>
 <form method="POST" action="{{ url_for('.game_challenge',key=game.short) }}">
-	<legend>Catch the ball</legend>
+	<legend><h3>Run to catch the ball</h3></legend>
 	<label><input class="challenge" data-lat="{{challenge.lat}}" data-lng="{{challenge.lng}}" type="radio" name="challenge_id" value="{{challenge.id}}" /> The Ball</label>
 	<input class="user coords" type="hidden" name="lat" />
 	<input class="user coords" type="hidden" name="lng" />
+	<br style="clear:both;" />
+	<input class="button" type="submit" value="I'm Here" /><a id="cancel_button" href="#" class="button cancel">Really Bad Idea</a>
+	<br style="clear:both;" />
 	<div class="map"></div>
-	<input class="button" type="submit" value="I'm Here" />
 </form>
-<form method="post" action="{{ url_for('.challenge_delete',id=challenge.id) }}">
+<form id="real_cancel" style="display:none;" method="post" action="{{ url_for('.challenge_delete',id=challenge.id) }}">
 	<!-- add reasons here?? -->
 	<input class="button cancel" type="submit" value="Really Bad Idea" />
 </form>

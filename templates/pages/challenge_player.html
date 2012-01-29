@@ -32,24 +32,30 @@ $(document).ready(function(){
 <form method="post" action="{{ url_for('.challenge_player',key=game.short) }}">
 	<legend>Throw a ball</legend>
 	<fieldset>
-		<legend><h3>Choose a player to get the ball</h3></legend>
+		<legend><h3>Throw the ball to:</h3></legend>
 		<ul class="players list">
 			{% for player in players %}
-			<li><label class="radio"><input type="radio" class="player" name="player_id" value="{{player.id}}" />{% if player.name %}{{player.name}}{% endif %}<em>{{player.phone}}</em></label></li>
+			{% if loop.first and loop.last %}
+			<li>
+				<input type="hidden" class="player" name="player_id" value="{{player.id}}" />
+				{% if player.name %}{{player.name}}{% endif %}&nbsp;<em>{{player.phone}}</em>
+			</li>
+			{% else %}
+			<li><label class="radio"><input type="radio" class="player" name="player_id" value="{{player.id}}" />{% if player.name %}{{player.name}}{% endif %}&nbsp;<em>{{player.phone}}</em></label></li>
+			{% endif %}
 			{% endfor %}
 		</ul>
 	</fieldset>
 	<fieldset>
-		<legend><h3>Choose where to throw the ball</h3></legend>
-		<p>Tap a spot on the map to throw a ball.</p>
+		<legend><h3>Tap map to aim before throwing</h3></legend>
 		<input type="hidden" name="lat" />
 		<input type="hidden" name="lng" />
+		<input type="submit" class="button" value="Throw Ball" />
 		<!--
 		<label for="map_search">Search Map For Location</label>
 		<input id="map_search" type="text" />
 		-->
 		<div class="map"></div>
 	</fieldset>
-	<input type="submit" class="button" value="Throw Ball" />
 </form>
 {% endblock %}

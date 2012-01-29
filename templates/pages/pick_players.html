@@ -26,15 +26,19 @@ $(document).ready(function(){
 <form method="post" action="{{ url_for('.pick_players',key=game.short)}}">
 	{% for player in friends %}
 	<label class="radio"><input class="player existing" type="radio" name="player_id" value="{{player.id}}" />{{player.name}} <em>({{player.phone}})</em></label>
-	{% endfor %}
+	{% if loop.last %}
 	<label class="radio"><input type="radio" name="player_id" value="new" />Add a new player</label>
+	{% endif %}
+	{% else%}
+	<input type="hidden" name="player_id" value="new" />
+	{% endfor %}
 	<fieldset>
 		<legend><span>Add a new player</span></legend>
 		<label for="name">Name</label>
 		<input id="name" type="text" name="name" />
-		<label for="phone">Phone Number <span class="required">Required</span></label>
+		<label for="phone">Phone Number</label>
 		<input id="phone" type="text" name="phone" />
 	</fieldset>
-	<input class="button" type="submit" value="Add Player" />
+	<input class="button" type="submit" value="Invite to Game" />
 </form>
 {% endblock %}

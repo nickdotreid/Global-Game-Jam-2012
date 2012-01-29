@@ -77,8 +77,8 @@ def challenge_player(key):
 			return redirect(url_for(".draw_game",key=game.short))
 		challenge = Challenge(game,player,request.form['lat'],request.form['lng']);
 		db_session.commit()
-		send_game_sms(player,game,"You got a challenge")
-		flash("Player has been challenged","success")
+		send_game_sms(player,game,g.player.name+" threw a ball at you")
+		flash("You threw the ball to "+player.name+" at "+player.phone,"success")
 		return redirect(url_for(".draw_game",key=game.short))
 	players = []
 	for player in game.players:
@@ -122,7 +122,9 @@ def challenge_delete(id):
 		db_session.delete(challenge)
 		db_session.commit()
 		flash("Challenge has been removed")
-		send_game_sms(challenge.player,challenge.game,challenge.player.name+" couldn't catch the ball. Give them something easier to catch.")
+		for player in challenge.game.players:
+			if player.id != challenge.player.id:
+				send_game_sms(player,challenge.game,challenge.player.name+" couldn't catch the ball. Give them something easier to catch.")
 		return redirect(url_for(".draw_game",key=challenge.game.short))
 	return redirect("/")
 

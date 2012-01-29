@@ -62,10 +62,13 @@ form label.radio input{
 	margin:0px auto;
 }
 }
-
+#head,#foot,#content{
+	clear:both;
+}
 .button{
 	display:block;
-	margin:3px auto 7px;
+	float:left;
+	margin:3px 10px 7px 0px;
 	width:200px;
 	border:1px #000 solid;
 	background:#dedede;
@@ -74,6 +77,7 @@ form label.radio input{
 	font-weight:bold;
 	padding:7px 0px 4px;
 	text-decoration:none;
+	text-align:center;
 }
 .button.hover,button:hover{
 	background:#acacac;

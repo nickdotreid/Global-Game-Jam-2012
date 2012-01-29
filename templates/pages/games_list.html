@@ -1,7 +1,7 @@
 {% extends "pages/home_page.html" %}
 
 {% block content %}
-	<a href="{{ url_for('.start_game') }}">New Game</a>
+	<a href="{{ url_for('.start_game') }}">Start a Run</a>
 	<ul class="games list">
 	{% for game in games %}
 	<li><a href="{{ url_for('.draw_game',key=game.short)}}">{{game.make_name()}}</a></li>

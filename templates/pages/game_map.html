@@ -17,7 +17,7 @@
 		{% if g.player and player.id == g.player.id %}
 		<!-- You can't add yourself -->
 		{% else %}
-		<li><label><input type="radio" name="player_id" value="{{player.id}}" />{{player.name}} <em>{{player.phone}}</em></label></li>
+		<li><label><input type="radio" name="player_id" value="{{player.id}}" />{{player.name}}&nbsp;<em>{{player.phone}}</em></label></li>
 		{% endif %}
 		{% endfor %}
 	</ul>
