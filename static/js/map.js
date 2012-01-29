@@ -10,11 +10,13 @@ $(document).ready(function(){
 		map_container.data("map",map);
 		
 		google.maps.event.addListener(map, 'click', function(event) {
-			map_container.trigger({
-				type:"add_marker",
-				lat:event.latLng.lat(),
-				lng:event.latLng.lng()
-			})
+			if(map_container.hasClass("target")){
+				map_container.trigger({
+					type:"add_marker",
+					lat:event.latLng.lat(),
+					lng:event.latLng.lng()
+				});				
+			}
 		});
 					
 	}).bind("add_marker",function(event){
@@ -29,6 +31,10 @@ $(document).ready(function(){
 			position: new google.maps.LatLng(event.lat, event.lng),
 			map: map
 		});
+		if(event.lat && event.lng){
+			$("form input.target[name=lat]").val(event.lat);
+			$("form input.target[name=lng]").val(event.lng);
+		}
 		$(this).data("marker",marker);
 	}).bind("add_player",function(event){
 		map = $(this).data("map");
@@ -55,11 +61,7 @@ $(document).ready(function(){
 		if(!map){
 			return true;
 		}
-		if(event.lat && event.lng){
-			map.setCenter(new google.maps.LatLng(event.lat, event.lng))
-			$("form input[name=lat]").val(event.lat);
-			$("form input[name=lng]").val(event.lng);
-		}
+		map.setCenter(new google.maps.LatLng(event.lat, event.lng))
 	});
 	$(".map").trigger("initialize");
 });

@@ -14,7 +14,7 @@
 				type:"set_center",
 				lat:challenge.data("lat"),
 				lng:challenge.data("lng")
-			});
+			}).trigger("show_user");
 		}).bind("click",function(){
 			$(this).trigger("show");
 		});
@@ -29,13 +29,12 @@
 				type:'add_player',
 				lat:lat,
 				lng:lng
-			})
+			});
 		});
 		$("#cancel_button").click(function(event){
 			event.preventDefault();
 			$("#real_cancel").submit();
 		})
-		setTimeout('$(".map").trigger("show_user");',300);
 		setTimeout('$(".challenge:first").click();',500);
 	});
 </script>

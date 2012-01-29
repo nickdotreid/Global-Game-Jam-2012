@@ -26,13 +26,24 @@ $(document).ready(function(){
 		$("input.player:first").click();
 	}
 	setTimeout('$("input.player:first").click();',700);
+	
+	$("form.throw").submit(function(event){
+		event.preventDefault();
+		form = $(this);
+		if($("input.target[name=lat]",form).val() != "" && $("input.target[name=lng]",form).val() != ""){
+			form.unbind("submit");
+			form[0].submit();
+			return true;
+		}
+		alert("Please throw the ball.");
+	});
 });
 </script>
 {% endblock %}
 
 {% block content %}
 <div class="score">Current Score:<span class="number">{{game.count_score()}}</span> points</div>
-<form method="post" action="{{ url_for('.challenge_player',key=game.short) }}">
+<form method="post" class="throw" action="{{ url_for('.challenge_player',key=game.short) }}">
 	<fieldset>
 		<legend><h3>Throw the ball to:</h3></legend>
 		<ul class="players list">
@@ -50,14 +61,14 @@ $(document).ready(function(){
 	</fieldset>
 	<fieldset>
 		<legend><h3>Tap map to aim before throwing</h3></legend>
-		<input type="hidden" name="lat" />
-		<input type="hidden" name="lng" />
+		<input type="hidden" class="target" name="lat" />
+		<input type="hidden" class="target" name="lng" />
 		<input type="submit" class="button" value="Throw Ball" />
 		<!--
 		<label for="map_search">Search Map For Location</label>
 		<input id="map_search" type="text" />
 		-->
-		<div class="map"></div>
+		<div class="map target"></div>
 	</fieldset>
 </form>
 {% endblock %}
