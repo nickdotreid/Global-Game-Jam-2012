@@ -131,6 +131,7 @@ def list_games():
 	if g.player is None:
 		return redirect("/")
 	games = g.player.games
+	games.reverse()
 	return render_template('pages/games_list.html',games=games,player=g.player)
 
 @app.route("/signup",methods=['GET','POST'])

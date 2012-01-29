@@ -1,10 +1,10 @@
 {% extends "pages/home_page.html" %}
 
 {% block content %}
+	<a href="{{ url_for('.start_game') }}">New Game</a>
 	<ul class="games list">
 	{% for game in games %}
-	<li><a href="{{ url_for('.draw_game',key=game.short)}}">{{game.short}}</a></li>
+	<li><a href="{{ url_for('.draw_game',key=game.short)}}">{{game.make_name()}}</a></li>
 	{% endfor %}
 	</ul>
-	<a href="{{ url_for('.start_game') }}">New Game</a>
 {% endblock %}

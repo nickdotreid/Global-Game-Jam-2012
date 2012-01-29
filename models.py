@@ -34,6 +34,16 @@ class Game(Base):
 	def __init__(self):
 		self.short = self.make_short()
 	
+	def make_name(self):
+		names = ""
+		for player in self.players:
+			if player.name is not None:
+				names += player.name
+			else:
+				names += player.phone
+			names +=" & "
+		return names + str(self.count_score()) + " points!"
+	
 	def make_short(self):
 		key = make_random_string(10)
 		if Game.query.filter_by(short=key).first() is not None:
