@@ -32,9 +32,10 @@ def pick_players(key):
 	if game is None:
 		return redirect("/")
 	if 'phone' in request.form:
-		player = Player.query.filter_by(phone=request.form['phone']).first()
+		phone_number = format_phone_number(request.form['phone'])
+		player = Player.query.filter_by(phone=phone_number).first()
 		if player is None:
-			player = Player(request.form['phone'])
+			player = Player(phone_number)
 			if 'name' in request.form:
 				player.name = request.form['name']
 			db_session.add(player)
@@ -120,6 +121,23 @@ def list_games():
 	games = g.player.games
 	return render_template('pages/games_list.html',games=games,player=g.player)
 
+@app.route("/signup",methods=['GET','POST'])
+def signup():
+	if 'phone' in request.form:
+		phone_number = format_phone_number(request.form['phone'])
+		player = Player.query.filter_by(phone=phone_number).first()
+		if player is None:
+			player = Player(phone_number)
+			db_session.add(player)
+			db_session.commit()
+		if 'name' in request.form:
+			player.name = request.form['name']
+			db_session.commit()
+		session['player_id'] = player.id
+		g.player = player
+		return redirect(url_for(".list_games"))
+	return render_template("pages/signup.html")	
+
 @app.route("/login",methods=['GET','POST'])
 def do_login():
 	login()
@@ -165,6 +183,13 @@ def login():
 
 def is_valid_number(num):
 	return True
+
+def format_phone_number(num):
+	# remove ( ) - . +1
+	num = num.replace('(','').replace(')','').replace('-','').replace('.','').replace('+1','')
+	while len(num)<10:
+		num += "0"
+	return num
 	
 def make_game_link(key):
 	return url_for(".draw_game",key=key)

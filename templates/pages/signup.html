@@ -1,8 +1,10 @@
 {% extends "pages/home_page.html" %}
 
 {% block content %}
-<form action="/start" method="get">
+<form action="{{ url_for('.signup') }}" method="POST">
 	<legend>Enter your phone number to start a game</legend>
+	<label for="name">Name</label>
+	<input type="text" id="name" name="name" />
 	<label for="phone_number">Your Phone Number</label>
 	<input type="text" id="phone_number" name="phone" value="" />
 	<input type="submit" value="Start" />
