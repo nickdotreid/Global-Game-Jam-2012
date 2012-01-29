@@ -18,7 +18,7 @@ $(document).ready(function(){
 		<legend><h3>Choose a player to get the ball</h3></legend>
 		<ul class="players list">
 			{% for player in players %}
-			<li><label class="radio"><input type="radio" class="player" name="player_id" value="{{player.id}}" />{% if player.name %}player.name{% endif %}<em>{{player.phone}}</em></label></li>
+			<li><label class="radio"><input type="radio" class="player" name="player_id" value="{{player.id}}" />{% if player.name %}{{player.name}}{% endif %}<em>{{player.phone}}</em></label></li>
 			{% endfor %}
 		</ul>
 	</fieldset>

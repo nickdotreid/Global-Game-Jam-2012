@@ -34,7 +34,6 @@ def pick_players(key):
 	if 'player_id' in request.form and request.form!="new":
 		player = get_player(id = request.form['player_id'])
 	if 'phone' in request.form and player is None:
-		phone_number = format_phone_number(request.form['phone'])
 		player = get_player(phone = request.form['phone'], name = request.form['name'])
 	if player is not None:
 		if add_player_to_game(player,game):
@@ -112,7 +111,7 @@ def check_challenge_answer():
 					name = player.phone
 					if player.name and player.name is not None:
 						name = player.name
-					send_game_sms(player,game,name+" has completed their challenge in")
+					send_game_sms(player,challenge.game,name+" has completed their challenge in")
 			return redirect(url_for(".draw_game",key=challenge.game.short))
 	return redirect("/")
 	
@@ -192,7 +191,7 @@ def get_player(id=False,phone=False,name=False):
 	player = None
 	if phone:
 		phone_number = format_phone_number(phone)
-		Player.query.filter_by(phone=phone_number).first()
+		player = Player.query.filter_by(phone=phone_number).first()
 	if id:
 		player = Player.query.filter_by(id=id).first()
 	if player is None and phone:
