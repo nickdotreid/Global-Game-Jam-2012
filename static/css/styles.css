@@ -6,6 +6,15 @@ a,a:visited{
 	color:#00F;
 	text-decoration:underline;
 }
+ul{
+	padding:0px;
+	margin:0px;
+}
+ul li{
+	list-style-type:none;
+	margin:0px;
+	padding:0px;
+}
 fieldset{
 	border:0px;
 	padding:0px;
@@ -17,6 +26,11 @@ fieldset{
 fieldset legend span{
 	position:absolute;
 	left:-10000px;
+}
+fieldset legend h3{
+	margin:0px;
+	padding:0px;
+	font-size:1em;
 }
 form label{
 	display:block;
@@ -36,14 +50,17 @@ form label.radio input{
 }
 
 .wrapper{
+	width: 270px;
+	display:block;
+	margin:0px auto;
+}
+
+@media all and (min-width: 600px) { 
+.wrapper{
 	width:550px;
 	display:block;
 	margin:0px auto;
 }
-@media only screen and (max-device-width: 400px) { 
-	.wrapper{
-		width: 270px;
-	}
 }
 
 .button{

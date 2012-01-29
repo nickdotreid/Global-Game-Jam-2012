@@ -78,10 +78,15 @@ def challenge_player(key):
 			return redirect(url_for(".draw_game",key=game.short))
 		challenge = Challenge(game,player,request.form['lat'],request.form['lng']);
 		db_session.commit()
-		send_sms(player.phone,"You got a challenge"+make_game_link(game.short))
+		send_game_sms(player,game,"You got a challenge")
 		flash("Player has been challenged","success")
 		return redirect(url_for(".draw_game",key=game.short))
-	return render_template("pages/challenge_player.html",game=game)
+	players = []
+	for player in game.players:
+		if player.id != g.player.id:
+			if Challenge.query.filter_by(game=game).filter_by(player=player).filter_by(completed=False).first() is None:
+				players.append(player)
+	return render_template("pages/challenge_player.html",game=game,players=players)
 
 @app.route("/game/<key>/my_challenge",methods=['GET','POST'])
 def game_challenge(key):
@@ -104,7 +109,10 @@ def check_challenge_answer():
 			flash("You caught the ball")
 			for player in challenge.game.players:
 				if player.id != g.player.id:
-					send_sms(player.phone," has completed their challenge in "+make_game_link(challenge.game.short))
+					name = player.phone
+					if player.name and player.name is not None:
+						name = player.name
+					send_game_sms(player,game,name+" has completed their challenge in")
 			return redirect(url_for(".draw_game",key=challenge.game.short))
 	return redirect("/")
 	
@@ -114,8 +122,8 @@ def challenge_delete(id):
 	if challenge is not None:
 		db_session.delete(challenge)
 		db_session.commit()
-		flash("Challenge has been deleted")
-		send_sms(challenge.player.name," couldn't catch the ball. Give them something easier to catch."+make_game_link(challenge.game.short))
+		flash("Challenge has been removed")
+		send_game_sms(challenge.player,challenge.game,challenge.player.name+" couldn't catch the ball. Give them something easier to catch.")
 		return redirect(url_for(".draw_game",key=challenge.game.short))
 	return redirect("/")
 
@@ -227,12 +235,16 @@ def format_phone_number(num):
 
 def pretty_phone_number(num):
 	return num
-	
-def make_game_link(key):
+
+def send_game_sms(player,game,message):
+	message = message + "\n" + make_game_link(game.short,player.phone)
+	send_sms(player.phone,message)
+
+def make_game_link(key,phone=None):
 	prefix = 'http://'
 	if 'ggj12_prefix' in os.environ:
 		prefix = os.environ['ggj12_prefix']
-	link = prefix+url_for(".draw_game",key=key)
+	link = prefix+url_for(".draw_game",key=key,phone=phone)
 	return shorten_url(link)
 
 def shorten_url(link):

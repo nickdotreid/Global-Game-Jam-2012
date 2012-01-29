@@ -5,10 +5,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	if($(".player:selected").length<1){
-		$(".player").click();
-	}
-	if($("input[name=player_id]").length<2){
-		$("input[name=player_id]").parents(".list").hide();
+		$(".player:first").click();
 	}
 });
 </script>
@@ -17,22 +14,25 @@ $(document).ready(function(){
 {% block content %}
 <form method="post" action="{{ url_for('.challenge_player',key=game.short) }}">
 	<legend>Throw a ball</legend>
-	<ul class="players list">
-		{% for player in game.players %}
-		{% if g.player and player.id == g.player.id %}
-		<!-- You can't add yourself -->
-		{% else %}
-		<li><label><input type="radio" class="player" name="player_id" value="{{player.id}}" />{{player.name}} <em>{{player.phone}}</em></label></li>
-		{% endif %}
-		{% endfor %}
-	</ul>
-	<input type="hidden" name="lat" />
-	<input type="hidden" name="lng" />
-	<!--
-	<label for="map_search">Search Map For Location</label>
-	<input id="map_search" type="text" />
-	-->
-	<div class="map"></div>
+	<fieldset>
+		<legend><h3>Choose a player to get the ball</h3></legend>
+		<ul class="players list">
+			{% for player in players %}
+			<li><label class="radio"><input type="radio" class="player" name="player_id" value="{{player.id}}" />{% if player.name %}player.name{% endif %}<em>{{player.phone}}</em></label></li>
+			{% endfor %}
+		</ul>
+	</fieldset>
+	<fieldset>
+		<legend><h3>Choose where to throw the ball</h3></legend>
+		<p>Tap a spot on the map to throw a ball.</p>
+		<input type="hidden" name="lat" />
+		<input type="hidden" name="lng" />
+		<!--
+		<label for="map_search">Search Map For Location</label>
+		<input id="map_search" type="text" />
+		-->
+		<div class="map"></div>
+	</fieldset>
 	<input type="submit" class="button" value="Throw Ball" />
 </form>
 {% endblock %}

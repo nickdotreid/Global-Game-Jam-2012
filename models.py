@@ -38,7 +38,10 @@ class Game(Base):
 		key = make_random_string(10)
 		if Game.query.filter_by(short=key).first() is not None:
 			return make_short(self)
-		return key	
+		return key
+	
+	def count_score(self):
+		return 10
 	
 	def __repr__(self):
 		return '<Game %r>' % (self.short)
