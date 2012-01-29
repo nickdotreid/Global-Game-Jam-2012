@@ -1,5 +1,5 @@
 from flask import Flask, redirect, request, flash, render_template, session, jsonify, Blueprint, url_for, g
-import twilio
+import os
 
 from database import db_session
 from models import *
@@ -7,7 +7,7 @@ from models import *
 from sms import send_sms
 
 app = Flask(__name__)
-app.secret_key = 'secrect'
+app.secret_key = os.environ['ggj12_secret_key']
 
 @app.route("/",methods=['GET', 'POST'])
 def home_page():

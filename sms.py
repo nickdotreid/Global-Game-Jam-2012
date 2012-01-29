@@ -1,8 +1,11 @@
 from flask import flash
+import os
+
+twilio_account_sid = os.environ['ggj12_twilio_account_sid']
+twilio_auth_token = os.environ['ggj12_twilio_auth_token']
 
 def send_sms(number,message):
 	from twilio.rest import TwilioRestClient
-	from twilio_settings import *
 	try:
 		flash("sending '"+message+"' to "+number)
 		client = TwilioRestClient(twilio_account_sid, twilio_auth_token)
