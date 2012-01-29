@@ -111,7 +111,7 @@ def check_challenge_answer():
 					name = player.phone
 					if player.name and player.name is not None:
 						name = player.name
-					send_game_sms(player,challenge.game,name+" has completed their challenge in")
+					send_game_sms(player,challenge.game,challenge.player+" caught the ball. Quick, throw it back!")
 			return redirect(url_for(".draw_game",key=challenge.game.short))
 	return redirect("/")
 	

@@ -65,6 +65,14 @@ form label.radio input{
 #head,#foot,#content{
 	clear:both;
 }
+
+#head{
+	margin-bottom:7px;
+}
+#foot{
+	margin-top:17px;
+	font-size:0.8em;
+}
 .button{
 	display:block;
 	float:left;
